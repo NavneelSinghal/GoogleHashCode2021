@@ -214,7 +214,7 @@ void solve(int) {
     
     int cnt = 0;
 
-    const int UP = 1000;
+    const int UP = 1000000;
 
     for (int i = 0; i < I; ++i) {
     
