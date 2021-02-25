@@ -10,6 +10,22 @@ else
 	CXXFLAGS = $(NORMAL_FLAGS)
 endif
 
+run:
+	@ ./a < tests/a.txt
+	@ echo
+	@ ./a < tests/b.txt
+	@ echo
+	@ ./a < tests/c.txt
+	@ echo
+	@ ./a < tests/d.txt
+	@ echo
+	@ ./a < tests/e.txt
+	@ echo
+	@ ./a < tests/f.txt
+	@ echo
+
 clean:
 	find . -maxdepth 1 -type f -executable -delete
 	rm -f *.o
+
+
