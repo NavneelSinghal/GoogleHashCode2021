@@ -179,59 +179,33 @@ void get_input();
 
 void print_stats();
 
-
-
 void solve(int) {
-
-    srand(time(NULL));
-
+    
     get_input();
 
-    // (f / total length) - contribution of a car to a
-    // street break into ratio of time
-
-    auto combine = [&](int f, long double total_len) {
-        return (long double)f / pow(total_len, 0.5);
-    };
-
-    auto build = [&](long long w) {
-        return (long double) pow(w, 0.5);
-    };
-
-    for (auto car : cars) {
-        long double len = 0;
-        for (auto i : car.path_indices) {
-            len += build(streets[i].L);
-            // len += 1;
-        }
-        for (auto i : car.path_indices) {
-            auto &p = streets[i];
-            p.score += combine(F, len);
+    int id = -1, mx = -1;
+    for (int i = 0; i < I; ++i) {
+        if (ckmax(mx, (int)incoming[i].size())) {
+            id = i;
         }
     }
-
     vector<vector<pair<int, int>>> output(I);  // pair of street index and time duration
-    
     int cnt = 0;
-
-    const int UP = 1000;
-
     for (int i = 0; i < I; ++i) {
-    
-        long double total_score = 0;
-        
-        for (auto index : incoming[i]) total_score += streets[index].score;
-        
-        if (total_score < eps) continue;
-        
-        random_shuffle(begin(incoming[i]), end(incoming[i]));
-        
-        for (auto index : incoming[i]) {
-            long long x = (long long)ceil(streets[index].score * min(UP, streets[index].L) / total_score);
-            if (x > 0) output[i].emplace_back(index, x);
+        if (i == id) {
+            for (auto index : incoming[i]) {
+                output[id].emplace_back(index, 1);
+            }
+        } else {
+            for (auto index : incoming[i]) {
+                if (streets[index].E == id) {
+                    output[i].emplace_back(index, 10);
+                } else {
+                    output[i].emplace_back(index, 1);
+                }
+            }
         }
-        
-        if (output[i].size()) cnt++;
+        cnt += output[i].size() != 0;
     }
 
     cout << cnt << '\n';
@@ -240,7 +214,6 @@ void solve(int) {
         cout << i << '\n';
         cout << output[i].size() << '\n';
         for (auto [index, score] : output[i]) {
-            assert(score > 0);
             cout << streets[index].name << ' ' << score << '\n';
         }
     }

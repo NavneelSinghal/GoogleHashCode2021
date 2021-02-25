@@ -179,8 +179,6 @@ void get_input();
 
 void print_stats();
 
-
-
 void solve(int) {
 
     srand(time(NULL));
@@ -195,7 +193,7 @@ void solve(int) {
     };
 
     auto build = [&](long long w) {
-        return (long double) pow(w, 0.5);
+        return (long double) pow(w, 2);
     };
 
     for (auto car : cars) {
@@ -211,26 +209,25 @@ void solve(int) {
     }
 
     vector<vector<pair<int, int>>> output(I);  // pair of street index and time duration
-    
+   
     int cnt = 0;
 
-    const int UP = 1000;
+    const int UP = 1;
 
     for (int i = 0; i < I; ++i) {
-    
+
         long double total_score = 0;
-        
+
         for (auto index : incoming[i]) total_score += streets[index].score;
-        
+
         if (total_score < eps) continue;
-        
+
         random_shuffle(begin(incoming[i]), end(incoming[i]));
-        
+
         for (auto index : incoming[i]) {
-            long long x = (long long)ceil(streets[index].score * min(UP, streets[index].L) / total_score);
-            if (x > 0) output[i].emplace_back(index, x);
+            output[i].emplace_back(index, 1);
         }
-        
+
         if (output[i].size()) cnt++;
     }
 
@@ -240,7 +237,7 @@ void solve(int) {
         cout << i << '\n';
         cout << output[i].size() << '\n';
         for (auto [index, score] : output[i]) {
-            assert(score > 0);
+            assert(score > 0 && score <= UP);
             cout << streets[index].name << ' ' << score << '\n';
         }
     }
@@ -268,9 +265,9 @@ void change_cars() {
     //      << remaining_time.back() << endl;
 
     sort(begin(cars), end(cars), [](const Cars &i, const Cars &j) {
-        if (i.works == j.works) return i.idx < j.idx;
-        return i.works;
-    });
+            if (i.works == j.works) return i.idx < j.idx;
+            return i.works;
+            });
 
     while (cars.size() > 0 && !cars.back().works) cars.pop_back();
 }
@@ -278,9 +275,9 @@ void change_cars() {
 void print_stats() {
     // avg path length
     // S / I - avg degree
-    
+
     get_input();
-    
+
     long double x = 0;
     for (auto &c : cars) {
         x += c.path_indices.size();
@@ -305,15 +302,15 @@ void print_stats() {
     cerr << "D " << D << endl;
     cerr << "quantiles\n";
     cerr << remaining_time.front() << ' '
-         << remaining_time[remaining_time.size() / 4] << ' '
-         << remaining_time[remaining_time.size() / 2] << ' '
-         << remaining_time[remaining_time.size() * 3 / 4] << ' '
-         << remaining_time.back() << endl;
+        << remaining_time[remaining_time.size() / 4] << ' '
+        << remaining_time[remaining_time.size() / 2] << ' '
+        << remaining_time[remaining_time.size() * 3 / 4] << ' '
+        << remaining_time.back() << endl;
 
     sort(begin(cars), end(cars), [](const Cars &i, const Cars &j) {
-        if (i.works == j.works) return i.idx < j.idx;
-        return i.works;
-    });
+            if (i.works == j.works) return i.idx < j.idx;
+            return i.works;
+            });
 
     while (cars.size() > 0 && !cars.back().works) cars.pop_back();
 
