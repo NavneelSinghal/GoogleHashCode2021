@@ -181,22 +181,26 @@ void print_stats();
 
 void solve(int) {
 
-    srand(3841);
+    srand(time(NULL));
 
     get_input();
 
     // (f / total length) - contribution of a car to a
     // street break into ratio of time
 
-    auto combine = [&](int f, int total_len) {
-        return (long double)f / total_len;
+    auto combine = [&](int f, long double total_len) {
+        return (long double)f / sqrtl(total_len);
+    };
+
+    auto build = [&](long long w) {
+        return (long double) sqrtl(w);
     };
 
     for (auto car : cars) {
-        long long len = 0;
+        long double len = 0;
         for (auto i : car.path_indices) {
-            // len += streets[i].L;
-            len += 1;
+            len += build(streets[i].L);
+            // len += 1;
         }
         for (auto i : car.path_indices) {
             auto &p = streets[i];
@@ -204,10 +208,11 @@ void solve(int) {
         }
     }
 
-    vector<vector<pair<int, int>>> output(
-        I);  // pair of street index and time duration
+    vector<vector<pair<int, int>>> output(I);  // pair of street index and time duration
     
     int cnt = 0;
+
+    const int UP = 1;
 
     for (int i = 0; i < I; ++i) {
     
@@ -220,9 +225,9 @@ void solve(int) {
         random_shuffle(begin(incoming[i]), end(incoming[i]));
         
         for (auto index : incoming[i]) {
-            long long x = (long long)ceil(streets[index].score * 4 / total_score);
+            long long x = (long long)ceil(streets[index].score * UP / total_score);
             if (x > 0) output[i].emplace_back(index, x);
-            assert(x <= 4);
+            assert(x <= UP);
         }
         
         if (output[i].size()) cnt++;
@@ -234,7 +239,7 @@ void solve(int) {
         cout << i << '\n';
         cout << output[i].size() << '\n';
         for (auto [index, score] : output[i]) {
-            assert(score > 0 && score <= 4);
+            assert(score > 0 && score <= UP);
             cout << streets[index].name << ' ' << score << '\n';
         }
     }
@@ -272,6 +277,9 @@ void change_cars() {
 void print_stats() {
     // avg path length
     // S / I - avg degree
+    
+    get_input();
+    
     long double x = 0;
     for (auto &c : cars) {
         x += c.path_indices.size();
@@ -286,7 +294,7 @@ void print_stats() {
         for (auto i : car.path_indices) total_time += streets[i].L;
         car.works = (total_time * 4 <= D * 3);  // TODO: change later on
         remaining_time.push_back(D - total_time);
-        best += F + D - total_time;
+        best += F + max(D - total_time, 0LL);
     }
 
     cerr << "best poss " << best << '\n';
@@ -368,6 +376,7 @@ signed main() {
     for (int _t = 1; _t <= t; _t++) {
         // cout << "Case #" << _t << ": ";
         solve(_t);
+        // print_stats();
         // brute(_t);
     }
     return 0;

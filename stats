@@ -1,0 +1,54 @@
+best poss 2000
+D 6
+quantiles
+-1 -1 1 1 1
+working cars 0
+total cars 2
+avg path len inf
+avg degree 1.25
+
+best poss 4489670
+D 5070
+quantiles
+1 2943 3620 4089 5005
+working cars 992
+total cars 1000
+avg path len 26.9556
+avg degree 1.28687
+
+best poss 1322948
+D 1640
+quantiles
+-9 996 1329 1518 1636
+working cars 964
+total cars 1000
+avg path len 78.6442
+avg degree 3.503
+
+best poss 3961369
+D 8071
+quantiles
+2301 2817 2965 3102 3567
+working cars 1000
+total cars 1000
+avg path len 200
+avg degree 11.991
+
+best poss 870933
+D 676
+quantiles
+-15 261 381 488 671
+working cars 891
+total cars 1000
+avg path len 6.79125
+avg degree 1.996
+
+best poss 1759486
+D 1992
+quantiles
+-7 786 1375 1765 1983
+working cars 850
+total cars 1000
+avg path len 160.602
+avg degree 6.01685
+
